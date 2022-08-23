@@ -37,3 +37,14 @@ spring:
       
 server:  port: 8080
   error:    include-stacktrace: always
+    
+# ===================================================================
+# Application specific properties
+# ===================================================================
+
+application:
+  endpoints:
+    binance:
+      base-url: https://api.binance.com
+    huobi:
+      base-url: https://api.huobi.pro

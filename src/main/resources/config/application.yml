@@ -35,3 +35,14 @@ spring:
       hibernate.generate_statistics: false
     hibernate:
       ddl-auto: none
+
+# ===================================================================
+# Application specific properties
+# ===================================================================
+
+application:
+  endpoints:
+    binance:
+      tickers: ${application.endpoints.binance.base-url}/api/v3/ticker/bookTicker
+    huobi:
+      tickers: ${application.endpoints.huobi.base-url}/market/tickers
