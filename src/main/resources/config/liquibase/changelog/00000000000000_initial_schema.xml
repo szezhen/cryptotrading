@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        Aquariux core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="00000000000001" author="sz.wong">
+        <createTable tableName="assets">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="asset_code" type="varchar(50)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_asset_code"/>
+            </column>
+            <column name="asset_name" type="varchar(255)"/>
+            <column name="active" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="timestamp"/>
+        </createTable>
+        
+        <loadData
+                  file="config/liquibase/data/assets.csv"
+                  separator=";"
+                  tableName="assets"
+                  usePreparedStatements="true">
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
