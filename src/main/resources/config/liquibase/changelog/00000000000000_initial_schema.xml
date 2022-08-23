@@ -12,6 +12,56 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="sz.wong">
+    	<createTable tableName="users">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+        
+        <loadData
+                  file="config/liquibase/data/users.csv"
+                  separator=";"
+                  tableName="users"
+                  usePreparedStatements="true">
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        
+        <createTable tableName="accounts">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+            <column name="uid" type="varchar(36)">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="uid"
+        						 baseTableName="accounts"
+        						 constraintName="fk_uid"
+        						 referencedColumnNames="id"
+        						 referencedTableName="users"/>
+        
+        <loadData
+                  file="config/liquibase/data/accounts.csv"
+                  separator=";"
+                  tableName="accounts"
+                  usePreparedStatements="true">
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+    
         <createTable tableName="assets">
             <column name="id" type="varchar(36)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -24,6 +74,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
         </createTable>
         
         <loadData
@@ -31,8 +82,122 @@
                   separator=";"
                   tableName="assets"
                   usePreparedStatements="true">
-            <column name="activated" type="boolean"/>
+            <column name="active" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
+        
+         <createTable tableName="account_assets">
+            <column name="acc_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="asset_id" type="varchar(36)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="free" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="locked" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+        
+        <addPrimaryKey columnNames="acc_id, asset_id" tableName="account_assets"/>
+        						 
+        <addForeignKeyConstraint baseColumnNames="acc_id"
+        						 baseTableName="account_assets"
+        						 constraintName="fk_acc_id"
+        						 referencedColumnNames="id"
+        						 referencedTableName="accounts"/>
+        						 
+        <addForeignKeyConstraint baseColumnNames="asset_id"
+        						 baseTableName="account_assets"
+        						 constraintName="fk_asset_id"
+        						 referencedColumnNames="id"
+        						 referencedTableName="assets"/>
+        						 
+        <loadData
+                  file="config/liquibase/data/account_assets.csv"
+                  separator=";"
+                  tableName="account_assets"
+                  usePreparedStatements="true">
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        
+        <createTable tableName="symbols">
+            <column name="symbol" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+        
+        <loadData
+                  file="config/liquibase/data/symbols.csv"
+                  separator=";"
+                  tableName="symbols"
+                  usePreparedStatements="true">
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        
+        <createTable tableName="orders">
+        	<column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="symbol" type="varchar(50)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="side" type="varchar(50)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="size" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="symbol"
+        						 baseTableName="orders"
+        						 constraintName="fk_symbol"
+        						 referencedColumnNames="symbol"
+        						 referencedTableName="symbols"/>
+        
+        <createTable tableName="trades">
+        	<column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="size" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="quote_size" type="decimal(27,18)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="order_id"
+        						 baseTableName="trades"
+        						 constraintName="fk_order_id"
+        						 referencedColumnNames="id"
+        						 referencedTableName="orders"/>
     </changeSet>
 </databaseChangeLog>

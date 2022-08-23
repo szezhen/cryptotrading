@@ -1,4 +1,4 @@
-id;asset_code;asset_name;active
-815cbfaf-4c6c-4b15-8845-126a57a1b5b7;USDT;Tether;true
-8984afde-9a4e-47d9-a6fa-c27248a8d6f1;BTC;Bitcoin;true
-bfcda08d-d63d-4416-89db-0009bb97b6be;ETH;Ethereum;true
+id;asset_code;asset_name;active;created_date
+815cbfaf-4c6c-4b15-8845-126a57a1b5b7;USDT;Tether;true;2022-08-23 12:13:14
+8984afde-9a4e-47d9-a6fa-c27248a8d6f1;BTC;Bitcoin;true;2022-08-23 12:13:14
+bfcda08d-d63d-4416-89db-0009bb97b6be;ETH;Ethereum;true;2022-08-23 12:13:14
