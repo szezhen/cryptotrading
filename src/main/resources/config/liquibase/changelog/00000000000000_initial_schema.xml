@@ -166,6 +166,7 @@
             </column>
             <column name="created_date" type="timestamp"/>
             <column name="last_modified_date" type="timestamp"/>
+            <column name="acc_id" type="varchar(36)"/>
         </createTable>
         
         <addForeignKeyConstraint baseColumnNames="symbol"

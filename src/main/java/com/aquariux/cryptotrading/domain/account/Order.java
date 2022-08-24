@@ -62,4 +62,7 @@ public class Order implements Serializable {
 	@LastModifiedDate
 	@Column(name = "last_modified_date")
 	private Instant lastModifiedDate;
+	
+	@Column(name = "acc_id")
+	private String accId;
 }
