@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.aquariux.cryptotrading.domain.account.Order;
 import com.aquariux.cryptotrading.domain.account.Ticker;
+import com.aquariux.cryptotrading.domain.market.OrderBook;
 import com.aquariux.cryptotrading.enumeration.OrderSide;
 import com.aquariux.cryptotrading.enumeration.OrderStatus;
 import com.aquariux.cryptotrading.enumeration.OrderType;
@@ -37,14 +38,18 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
 	private final BinanceTickerService binanceTickerService;
 	private final HuobiTickerService huobiTickerService;
 	private final OrderService orderService;
+//	private final OrderBookService orderBookService
 	
 	public PriceAggregationServiceImpl(
 			BinanceTickerService binanceTickerService,
 			HuobiTickerService huobiTickerService,
-			OrderService orderService) {
+			OrderService orderService
+//			OrderBookService orderBookService
+			) {
 		this.binanceTickerService = binanceTickerService;
 		this.huobiTickerService = huobiTickerService;
 		this.orderService = orderService;
+//		this.orderBookService = orderBookService;
 	}
 
 	@Scheduled(fixedRate = INTERVAL_IN_SECONDS)
@@ -112,6 +117,8 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
 					ticker.setAskSize(huobiAskSize);
 				}
 				
+//				OrderBook orderBook = orderBookService.getOrderBookInstance(ticker.getSymbol());
+				
 				Order buyOrder = new Order();
 				buyOrder.setSymbol(ticker.getSymbol());
 				buyOrder.setPrice(ticker.getBidPrice());
@@ -119,6 +126,8 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
 				buyOrder.setType(OrderType.LIMIT);
 				buyOrder.setSide(OrderSide.BUY);
 				buyOrder.setStatus(OrderStatus.OPEN);
+				
+//				orderBookService.addBid(orderBook, ticker.getBidPrice(), ticker.getBidSize());
 				
 				orderService.save(buyOrder);
 				
@@ -129,6 +138,8 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
 				sellOrder.setType(OrderType.LIMIT);
 				sellOrder.setSide(OrderSide.SELL);
 				sellOrder.setStatus(OrderStatus.OPEN);
+				
+//				orderBookService.addBid(orderBook, ticker.getAskPrice(), ticker.getAskSize());
 				
 				orderService.save(sellOrder);
 			});
